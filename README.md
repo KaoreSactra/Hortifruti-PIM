@@ -8,19 +8,9 @@ Este projeto foi desenvolvido como parte do curso de **Análise e Desenvolviment
 
 O objetivo principal é criar um sistema simples para um hortifruti, contemplando os processos de:
 - Cálculo e gerenciamento de transações nos caixas
-- Pesagem de produtos por unidade de massa
 - Armazenamento e centralização de dados no servidor local.
 
-O projeto integra conteúdos das disciplinas de **Fundamentos de Redes de Dados e Comunicação**, **Engenharia de Software I**, **Linguagem e Técnicas de Programação**, **Matemática para Computação**, **Ética e Legislação Profissional**, **Metodologia Científica**, e **Educação Ambiental**.  
-
-## Funcionalidades do Sistema
-
-O sistema possui três módulos principais:
-1. **Módulo Servidor**: Centraliza os dados das transações e coordena o armazenamento de informações.
-2. **Módulo Caixa**: Realiza o cálculo do valor total das compras.
-3. **Módulo Estação de Pesagem**: Calcula o valor de produtos vendidos por peso.
-
-Cada módulo opera em modo console e foi projetado para ambientes com computadores de segunda mão, interligados em uma rede LAN.
+O projeto integra conteúdos das disciplinas de **Fundamentos de Redes de Dados e Comunicação**, **Engenharia de Software I**, **Linguagem e Técnicas de Programação**, **Matemática para Computação**, **Ética e Legislação Profissional**, **Metodologia Científica**, e **Educação Ambiental**.
 
 ## Documentação do Projeto
 
