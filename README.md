@@ -30,8 +30,4 @@ Além do código-fonte, o projeto inclui:
 - **Análise de Sustentabilidade**: Estratégias para descarte sustentável e doação de alimentos, alinhadas aos Objetivos de Desenvolvimento Sustentável da ONU.
 - **Relatório de Ética e Conduta Profissional**: Diretrizes éticas e missão da empresa.
 
-## Como Executar
-
-Para compilar e executar cada módulo, consulte os manuais de uso fornecidos na documentação do projeto. O código-fonte está devidamente comentado para auxiliar no entendimento do funcionamento e manutenção do sistema.
-
 ---
