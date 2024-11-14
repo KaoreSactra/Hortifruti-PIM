@@ -1,10 +1,1 @@
-Maçã
-Banana
-Peixe
-P�o
-Queijo
-Carne
-Laranja
-Melancia
-Suco
-Leite
+Ma�a
