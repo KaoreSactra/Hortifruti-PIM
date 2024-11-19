@@ -2,32 +2,44 @@
 #include <string.h>
 #include <ctype.h>
 #include <locale.h>
+#include <stdlib.h>
 
-// FunÃ§Ã£o para adicionar um produto
-void adicionarProduto(char NomeProduto[][50], int *quantidade)
+void adicionarProduto(char NomeProduto[][100], int Quantidade[], float Preco[], int *quantidade)
 {
-    if (*quantidade >= 10)
+    if (*quantidade >= 30)
     {
-        printf("InventÃ¡rio cheio! NÃ£o Ã© possÃ­vel adicionar mais produtos.\n");
+        printf("Inventário cheio! Não é possível adicionar mais produtos.\n");
         return;
     }
 
-    printf("Digite o nome do produto: ");
-    fgets(NomeProduto[*quantidade], 50, stdin);
+    char nome[50];
+    float preco;
 
-    // Remove o caractere de nova linha
-    size_t len = strlen(NomeProduto[*quantidade]);
-    if (len > 0 && NomeProduto[*quantidade][len - 1] == '\n')
+    printf("Digite o nome do produto: ");
+    fgets(nome, 50, stdin);
+
+    size_t len = strlen(nome);
+    if (len > 0 && nome[len - 1] == '\n')
     {
-        NomeProduto[*quantidade][len - 1] = '\0';
+        nome[len - 1] = '\0';
     }
 
+    printf("Digite o preço do produto: ");
+    scanf("%f", &preco);
+    getchar();
+
+    printf("Digite a quantidade do produto: ");
+    scanf("%d", &Quantidade[*quantidade]);
+    getchar();
+
+    snprintf(NomeProduto[*quantidade], 100, "%s", nome);
+    Preco[*quantidade] = preco;
     (*quantidade)++;
+
     printf("Produto adicionado com sucesso!\n");
 }
 
-// FunÃ§Ã£o para remover um produto
-void removerProduto(char NomeProduto[][50], int *quantidade)
+void removerProduto(char NomeProduto[][100], int Quantidade[], float Preco[], int *quantidade)
 {
     if (*quantidade == 0)
     {
@@ -36,28 +48,28 @@ void removerProduto(char NomeProduto[][50], int *quantidade)
     }
 
     int indice;
-    printf("Digite o nÃºmero do produto que deseja remover (1 a %d): ", *quantidade);
+    printf("Digite o número do produto que deseja remover (1 a %d): ", *quantidade);
     scanf("%d", &indice);
-    getchar(); // Limpa o buffer
+    getchar();
 
     if (indice < 1 || indice > *quantidade)
     {
-        printf("NÃºmero invÃ¡lido.\n");
+        printf("Número inválido.\n");
         return;
     }
 
-    // Move os produtos seguintes para trÃ¡s
     for (int i = indice - 1; i < *quantidade - 1; i++)
     {
         strcpy(NomeProduto[i], NomeProduto[i + 1]);
+        Quantidade[i] = Quantidade[i + 1];
+        Preco[i] = Preco[i + 1];
     }
 
-    (*quantidade)--;
+    (*quantidade)--; 
     printf("Produto removido com sucesso!\n");
 }
 
-// FunÃ§Ã£o para editar um produto
-void editarProduto(char NomeProduto[][50], int quantidade)
+void editarProduto(char NomeProduto[][100], int Quantidade[], float Preco[], int quantidade)
 {
     if (quantidade == 0)
     {
@@ -66,31 +78,42 @@ void editarProduto(char NomeProduto[][50], int quantidade)
     }
 
     int indice;
-    printf("Digite o nÃºmero do produto que deseja editar (1 a %d): ", quantidade);
+    char nome[50];
+    float preco;
+
+    printf("Digite o número do produto que deseja editar (1 a %d): ", quantidade);
     scanf("%d", &indice);
-    getchar(); // Limpa o buffer
+    getchar();
 
     if (indice < 1 || indice > quantidade)
     {
-        printf("NÃºmero invÃ¡lido.\n");
+        printf("Número inválido.\n");
         return;
     }
 
     printf("Digite o novo nome do produto: ");
-    fgets(NomeProduto[indice - 1], 50, stdin);
+    fgets(nome, 50, stdin);
 
-    // Remove o caractere de nova linha
-    size_t len = strlen(NomeProduto[indice - 1]);
-    if (len > 0 && NomeProduto[indice - 1][len - 1] == '\n')
+    size_t len = strlen(nome);
+    if (len > 0 && nome[len - 1] == '\n')
     {
-        NomeProduto[indice - 1][len - 1] = '\0';
+        nome[len - 1] = '\0';
     }
 
+    printf("Digite o novo preço do produto: ");
+    scanf("%f", &preco);
+    getchar();
+
+    printf("Digite a nova quantidade do produto: ");
+    scanf("%d", &Quantidade[indice - 1]);
+    getchar();
+
+    snprintf(NomeProduto[indice - 1], 100, "%s", nome);
+    Preco[indice - 1] = preco;
     printf("Produto editado com sucesso!\n");
 }
 
-// FunÃ§Ã£o para salvar os produtos em um arquivo de texto
-void salvarProdutosEmArquivo(const char NomeProduto[][50], int quantidade, const char *nomeArquivo)
+void salvarProdutosEmArquivo(const char NomeProduto[][100], int Quantidade[], float Preco[], int quantidade, const char *nomeArquivo)
 {
     FILE *arquivo = fopen(nomeArquivo, "w");
     if (arquivo == NULL)
@@ -101,93 +124,161 @@ void salvarProdutosEmArquivo(const char NomeProduto[][50], int quantidade, const
 
     for (int i = 0; i < quantidade; i++)
     {
-        fprintf(arquivo, "%s\n", NomeProduto[i]);
+        fprintf(arquivo, "%s | %.2f | %d\n", NomeProduto[i], Preco[i], Quantidade[i]);
     }
 
     fclose(arquivo);
     printf("Produtos salvos no arquivo %s com sucesso!\n", nomeArquivo);
 }
 
-// FunÃ§Ã£o para gerenciar inventÃ¡rio (Adicionar, Remover, Editar)
-void inventariarProduto(char NomeProduto[][50], int *quantidade)
+void inventariarProduto(char NomeProduto[][100], int Quantidade[], float Preco[], int *quantidade)
 {
     int opcao;
 
     do
     {
-        printf("-------------- InventÃ¡rio --------------\n");
+        system("cls");
+        printf("-------------- Inventário --------------\n");
         printf("1 = Adicionar Produto\n2 = Remover Produto\n3 = Editar Produto\n4 = Voltar ao Menu Principal\n");
         printf("----------------------------------------\n");
         scanf("%d", &opcao);
-        getchar(); // Limpa o buffer
+        getchar();
 
         switch (opcao)
         {
         case 1:
-            adicionarProduto(NomeProduto, quantidade);
-            salvarProdutosEmArquivo(NomeProduto, *quantidade, "produtos.txt");
+            adicionarProduto(NomeProduto, Quantidade, Preco, quantidade);
+            salvarProdutosEmArquivo(NomeProduto, Quantidade, Preco, *quantidade, "produtos.txt");
             break;
         case 2:
-            removerProduto(NomeProduto, quantidade);
-            salvarProdutosEmArquivo(NomeProduto, *quantidade, "produtos.txt");
+            removerProduto(NomeProduto, Quantidade, Preco, quantidade);
+            salvarProdutosEmArquivo(NomeProduto, Quantidade, Preco, *quantidade, "produtos.txt");
             break;
         case 3:
-            editarProduto(NomeProduto, *quantidade);
-            salvarProdutosEmArquivo(NomeProduto, *quantidade, "produtos.txt");
+            editarProduto(NomeProduto, Quantidade, Preco, *quantidade);
+            salvarProdutosEmArquivo(NomeProduto, Quantidade, Preco, *quantidade, "produtos.txt");
             break;
         case 4:
             printf("Voltando ao menu principal...\n");
             break;
         default:
-            printf("OpÃ§Ã£o invÃ¡lida.\n");
+            printf("Opção inválida.\n");
         }
     } while (opcao != 4);
 }
 
-// FunÃ§Ã£o para exibir o estoque
-void estoque(const char NomeProduto[][50], int quantidade)
+void estoque(const char NomeProduto[][100], int Quantidade[], float Preco[], int quantidade)
 {
     if (quantidade == 0)
     {
-        printf("Nenhum produto no inventÃ¡rio.\n");
+        printf("Nenhum produto no inventário.\n");
         return;
     }
 
+    system("cls");
     printf("----------- Estoque -----------\n");
     for (int i = 0; i < quantidade; i++)
     {
-        printf("Produto %d: %s\n", i + 1, NomeProduto[i]);
+        printf("%d: %s | Preço: %.2f | Quantidade: %d\n", i + 1, NomeProduto[i], Preco[i], Quantidade[i]);
     }
     printf("--------------------------------\n");
 }
 
+void registrarCompra(char NomeProduto[][100], int Quantidade[], float Preco[], int *quantidade)
+{
+    FILE *notaFiscal = fopen("nota_fiscal.txt", "w");
+    if (notaFiscal == NULL)
+    {
+        printf("Erro ao criar a nota fiscal.\n");
+        return;
+    }
+
+    int produtoIndex, quantidadeCompra;
+    float totalCompra = 0.0;
+    printf("Digite o número do produto para compra (1 a %d): ", *quantidade);
+    scanf("%d", &produtoIndex);
+    getchar();
+
+    if (produtoIndex < 1 || produtoIndex > *quantidade)
+    {
+        printf("Produto inválido.\n");
+        fclose(notaFiscal);
+        return;
+    }
+
+    printf("Digite a quantidade do produto a ser comprada: ");
+    scanf("%d", &quantidadeCompra);
+    getchar();
+
+    if (quantidadeCompra > Quantidade[produtoIndex - 1])
+    {
+        printf("Quantidade insuficiente em estoque.\n");
+        fclose(notaFiscal);
+        return;
+    }
+
+    // Atualizando o estoque
+    Quantidade[produtoIndex - 1] -= quantidadeCompra;
+
+    // Gerando a nota fiscal
+    float preco = Preco[produtoIndex - 1];
+    fprintf(notaFiscal, "-------------- Nota Fiscal --------------\n");
+    fprintf(notaFiscal, "Produto: %s\n", NomeProduto[produtoIndex - 1]);
+    fprintf(notaFiscal, "Quantidade comprada: %d\n", quantidadeCompra);
+    fprintf(notaFiscal, "Preço unitário: %.2f\n", preco);
+    fprintf(notaFiscal, "Total: %.2f\n", preco * quantidadeCompra);
+    fprintf(notaFiscal, "----------------------------------------\n");
+
+    totalCompra += preco * quantidadeCompra;
+    fprintf(notaFiscal, "Total geral: %.2f\n", totalCompra);
+    
+    // Exibindo no terminal
+    printf("\n-------------- Nota Fiscal --------------\n");
+    printf("Produto: %s\n", NomeProduto[produtoIndex - 1]);
+    printf("Quantidade comprada: %d\n", quantidadeCompra);
+    printf("Preço unitário: %.2f\n", preco);
+    printf("Total: %.2f\n", preco * quantidadeCompra);
+    printf("----------------------------------------\n");
+    printf("Total geral: %.2f\n", totalCompra);
+
+    fclose(notaFiscal);
+
+    printf("Compra registrada com sucesso! Nota fiscal gerada.\n");
+}
+
 int main()
 {
-    setlocale(LC_ALL, "portuguese");
+    setlocale(LC_ALL, "Portuguese_Brazil.1252");
 
-    char NomeProduto[10][50];
-    char contador[10];
+    char NomeProduto[30][100];
+    int Quantidade[30];
+    float Preco[30];
     int quantidade = 0;
     int escolha;
+    char contador[10];
 
     do
     {
+        system("cls");
         printf("-------------- Menu --------------\n");
-        printf("1 = Inventariar\n2 = Estoque\n");
+        printf("1 = Inventariar\n2 = Estoque\n3 = Registrar Compra\n");
         printf("----------------------------------\n");
         scanf("%d", &escolha);
-        getchar(); // Limpa o buffer
+        getchar();
 
         switch (escolha)
         {
         case 1:
-            inventariarProduto(NomeProduto, &quantidade);
+            inventariarProduto(NomeProduto, Quantidade, Preco, &quantidade);
             break;
         case 2:
-            estoque(NomeProduto, quantidade);
+            estoque(NomeProduto, Quantidade, Preco, quantidade);
+            break;
+        case 3:
+            registrarCompra(NomeProduto, Quantidade, Preco, &quantidade);
             break;
         default:
-            printf("OpÃ§Ã£o invÃ¡lida.\n");
+            printf("Opção inválida.\n");
         }
 
         printf("Deseja continuar? ");
