@@ -238,7 +238,7 @@ void registrarCompra(char NomeProduto[][100], int Quantidade[], float Preco[], i
         printf("Deseja adicionar mais produtos à compra? (s/n): ");
         scanf(" %9s", continuarCompra);
         
-    } while (strcasecmp(continuarCompra, "s") == 0 || strcasecmp(continuarCompra, "sim") == 0 || strcasecmp(continuarCompra, "y") == 0 || strcasecmp(continuarCompra, "yes") == 0);
+    } while (strcasecmp(continuarCompra, "s") == 0 || strcasecmp(continuarCompra, "sim") == 0 || strcasecmp(continuarCompra, "y") == 0 || strcasecmp(continuarCompra, "yes") == 0 || strcasecmp(continuarCompra, "1") == 0);
 
     fprintf(notaFiscal, "-------------- Nota Fiscal --------------\n");
     fprintf(notaFiscal, "Total geral: %.2f\n", totalCompra);
@@ -250,6 +250,7 @@ void registrarCompra(char NomeProduto[][100], int Quantidade[], float Preco[], i
     printf("-----------------------------------------\n");
 
     printf("Compra registrada com sucesso! Nota fiscal gerada.\n");
+    salvarProdutosEmArquivo(NomeProduto, Quantidade, Preco, *quantidade, "produtos.txt");
 }
 
 int main()
