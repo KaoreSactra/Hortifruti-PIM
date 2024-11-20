@@ -8,7 +8,7 @@ void adicionarProduto(char NomeProduto[][100], int Quantidade[], float Preco[], 
 {
     if (*quantidade >= 30)
     {
-        printf("Inventário cheio! Não é possível adicionar mais produtos.\n");
+        printf("inventário cheio! Não é possível adicionar mais produtos.\n");
         return;
     }
 
@@ -138,7 +138,7 @@ void inventariarProduto(char NomeProduto[][100], int Quantidade[], float Preco[]
     do
     {
         system("cls");
-        printf("-------------- Inventário --------------\n");
+        printf("-------------- inventário --------------\n");
         printf("1 = Adicionar Produto\n2 = Remover Produto\n3 = Editar Produto\n4 = Voltar ao Menu Principal\n");
         printf("----------------------------------------\n");
         scanf("%d", &opcao);
@@ -195,53 +195,58 @@ void registrarCompra(char NomeProduto[][100], int Quantidade[], float Preco[], i
 
     int produtoIndex, quantidadeCompra;
     float totalCompra = 0.0;
-    printf("Digite o número do produto para compra (1 a %d): ", *quantidade);
-    scanf("%d", &produtoIndex);
-    getchar();
+    char continuarCompra[10];
 
-    if (produtoIndex < 1 || produtoIndex > *quantidade)
+    system("cls");
+    printf("-------------- Início da Compra --------------\n");
+
+    do
     {
-        printf("Produto inválido.\n");
-        fclose(notaFiscal);
-        return;
-    }
+        printf("Digite o número do produto para compra (1 a %d): ", *quantidade);
+        scanf("%d", &produtoIndex);
+        getchar();
 
-    printf("Digite a quantidade do produto a ser comprada: ");
-    scanf("%d", &quantidadeCompra);
-    getchar();
+        if (produtoIndex < 1 || produtoIndex > *quantidade)
+        {
+            printf("Produto inválido.\n");
+            continue;
+        }
 
-    if (quantidadeCompra > Quantidade[produtoIndex - 1])
-    {
-        printf("Quantidade insuficiente em estoque.\n");
-        fclose(notaFiscal);
-        return;
-    }
+        printf("Digite a quantidade do produto a ser comprada: ");
+        scanf("%d", &quantidadeCompra);
+        getchar();
 
-    // Atualizando o estoque
-    Quantidade[produtoIndex - 1] -= quantidadeCompra;
+        if (quantidadeCompra > Quantidade[produtoIndex - 1])
+        {
+            printf("Quantidade insuficiente em estoque.\n");
+            continue;
+        }
 
-    // Gerando a nota fiscal
-    float preco = Preco[produtoIndex - 1];
+        Quantidade[produtoIndex - 1] -= quantidadeCompra;
+
+        float preco = Preco[produtoIndex - 1];
+        fprintf(notaFiscal, "-----------------------------------------\n");
+        fprintf(notaFiscal, "Produto: %s\n", NomeProduto[produtoIndex - 1]);
+        fprintf(notaFiscal, "Quantidade comprada: %d\n", quantidadeCompra);
+        fprintf(notaFiscal, "Preço unitário: %.2f\n", preco);
+        fprintf(notaFiscal, "Total: %.2f\n", preco * quantidadeCompra);
+        totalCompra += preco * quantidadeCompra;
+
+        printf("Produto adicionado à nota fiscal.\n");
+
+        printf("Deseja adicionar mais produtos à compra? (s/n): ");
+        scanf(" %9s", continuarCompra);
+        
+    } while (strcasecmp(continuarCompra, "s") == 0 || strcasecmp(continuarCompra, "sim") == 0 || strcasecmp(continuarCompra, "y") == 0 || strcasecmp(continuarCompra, "yes") == 0);
+
     fprintf(notaFiscal, "-------------- Nota Fiscal --------------\n");
-    fprintf(notaFiscal, "Produto: %s\n", NomeProduto[produtoIndex - 1]);
-    fprintf(notaFiscal, "Quantidade comprada: %d\n", quantidadeCompra);
-    fprintf(notaFiscal, "Preço unitário: %.2f\n", preco);
-    fprintf(notaFiscal, "Total: %.2f\n", preco * quantidadeCompra);
-    fprintf(notaFiscal, "----------------------------------------\n");
-
-    totalCompra += preco * quantidadeCompra;
     fprintf(notaFiscal, "Total geral: %.2f\n", totalCompra);
-    
-    // Exibindo no terminal
-    printf("\n-------------- Nota Fiscal --------------\n");
-    printf("Produto: %s\n", NomeProduto[produtoIndex - 1]);
-    printf("Quantidade comprada: %d\n", quantidadeCompra);
-    printf("Preço unitário: %.2f\n", preco);
-    printf("Total: %.2f\n", preco * quantidadeCompra);
-    printf("----------------------------------------\n");
-    printf("Total geral: %.2f\n", totalCompra);
-
     fclose(notaFiscal);
+
+    system("cls");
+    printf("-------------- Nota Fiscal --------------\n");
+    printf("Total geral: %.2f\n", totalCompra);
+    printf("-----------------------------------------\n");
 
     printf("Compra registrada com sucesso! Nota fiscal gerada.\n");
 }
@@ -278,7 +283,7 @@ int main()
             registrarCompra(NomeProduto, Quantidade, Preco, &quantidade);
             break;
         default:
-            printf("Opção inválida.\n");
+            printf("Opçãoo inválida.\n");
         }
 
         printf("Deseja continuar? ");

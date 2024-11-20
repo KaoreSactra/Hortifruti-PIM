@@ -1,0 +1,12 @@
+-----------------------------------------
+Produto: Banana
+Quantidade comprada: 12
+Preço unitário: 2,00
+Total: 24,00
+-----------------------------------------
+Produto: Banana
+Quantidade comprada: 1
+Preço unitário: 2,00
+Total: 2,00
+-------------- Nota Fiscal --------------
+Total geral: 26,00
