@@ -6,6 +6,7 @@
 
 void adicionarProduto(char NomeProduto[][100], int Quantidade[], float Preco[], int *quantidade)
 {
+    // Limite de quantidade definido em 30
     if (*quantidade >= 30)
     {
         printf("inventário cheio! Não é possível adicionar mais produtos.\n");
@@ -255,6 +256,7 @@ int main()
 {
     setlocale(LC_ALL, "Portuguese_Brazil.1252");
 
+    // Limite de quantidade definido em 30
     char NomeProduto[30][100];
     int Quantidade[30];
     float Preco[30];
