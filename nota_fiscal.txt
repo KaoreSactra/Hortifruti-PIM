@@ -1,12 +1,17 @@
------------------------------------------
+----------------------------------------------------------
 Produto: Banana
-Quantidade comprada: 32
-Preço unitário: 3,14
-Total: 100,48
------------------------------------------
-Produto: Kiwi
-Quantidade comprada: 35
-Preço unitário: 4,00
-Total: 140,00
--------------- Nota Fiscal --------------
-Total geral: 240,48
+Quantidade comprada (kg): 2
+R$/kg: 23,00
+Total: 46,00
+----------------------------------------------------------
+Produto: Maca
+Quantidade comprada (kg): 1
+R$/kg: 29,50
+Total: 29,50
+----------------------------------------------------------
+Produto: Abacaxi
+Quantidade comprada (kg): 4
+R$/kg: 22,00
+Total: 88,00
+----------------------- Nota Fiscal ----------------------
+Total geral (R$): 163,50
