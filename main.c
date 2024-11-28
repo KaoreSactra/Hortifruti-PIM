@@ -7,6 +7,7 @@
 // Função para importar estoque
 void carregarProdutosDeArquivo(char NomeProduto[][30], float Quantidade[], float Preco[], int *quantidade, const char *nomeArquivo)
 {
+    // Abrir txt onde importa estoque
     FILE *arquivo = fopen(nomeArquivo, "r");
     if (arquivo == NULL)
     {
@@ -15,16 +16,19 @@ void carregarProdutosDeArquivo(char NomeProduto[][30], float Quantidade[], float
         return;
     }
 
-    char linha[200];
-    *quantidade = 0;
+    // Leitura de linhas
+    char linha[200]; // Máximo 200 caracteres por linha.
+    *quantidade = 0; // Porteiro para saber a quantidade de produtos
     while (fgets(linha, sizeof(linha), arquivo))
     {
-        linha[strcspn(linha, "\n")] = '\0';
+        linha[strcspn(linha, "\n")] = '\0'; // Remove o caractere de nova linha (\n) que pode ser incluído pelo fgets.
         char nome[30];
         float preco, quantidadeProduto;
 
-        if (sscanf(linha, "%[^|]|%f|%f", nome, &preco, &quantidadeProduto) == 3)
+        // Scannear linhas
+        if (sscanf(linha, "%[^|]|%f|%f", nome, &preco, &quantidadeProduto) == 3) // "%[^|]" separa o nome do produto até a |.
         {
+            // Armazenamento nos Arrays
             if (*quantidade < 50)
             {
                 snprintf(NomeProduto[*quantidade], 100, "%s", nome);
@@ -33,7 +37,7 @@ void carregarProdutosDeArquivo(char NomeProduto[][30], float Quantidade[], float
                 (*quantidade)++;
             }
         }
-        else
+        else // Tratamento de Erros
         {
             printf("Erro ao interpretar a linha: '%s'\n", linha);
         }
@@ -77,7 +81,7 @@ void registrarCompra(char NomeProduto[][30], float Quantidade[], float Preco[], 
     float totalCompra = 0.0;
     char continuarCompra[10];
 
-    system("cls");
+    system("cls"); // Limpar tela para exibir novo menu
     printf("----------------------- Início da Compra -----------------------\n");
 
     do
@@ -123,7 +127,7 @@ void registrarCompra(char NomeProduto[][30], float Quantidade[], float Preco[], 
     fprintf(notaFiscal, "Total geral (R$): %.2f\n", totalCompra);
     fclose(notaFiscal);
 
-    system("cls");
+    system("cls"); // Limpar tela para exibir novo menu
     printf("---------------------- Nota Fiscal ----------------------\n");
     printf("Total geral: %.2f\n", totalCompra);
     printf("----------------------------------------------------------\n");
@@ -245,7 +249,7 @@ void inventariarProduto(char NomeProduto[][30], float Quantidade[], float Preco[
     int opcao;
     do
     {
-        system("cls");
+        system("cls"); // Limpar tela para exibir novo menu
         printf("------------ Inventário ------------\n");
         printf("1. Adicionar Produto\n");
         printf("2. Remover Produto\n");
@@ -288,32 +292,36 @@ void estoque(const char NomeProduto[][30], float Quantidade[], float Preco[], in
         return;
     }
 
-    system("cls");
-    printf("------------------------- Estoque -------------------------\n");
+    system("cls"); // Limpar tela para exibir novo menu
+    printf("---------------------------------- Estoque ----------------------------------\n");
     for (int i = 0; i < quantidade; i++)
     {
-        printf("%03d: %-15s | R$/kg: %-6.2f | Quantidade (kg): %6.2f\n", i + 1, NomeProduto[i], Preco[i], Quantidade[i]);
+        printf("%03d: %-29s | R$/kg: %-6.2f | Quantidade (kg): %6.2f\n", i + 1, NomeProduto[i], Preco[i], Quantidade[i]);
     }
-    printf("-----------------------------------------------------------\n");
+    printf("-----------------------------------------------------------------------------\n");
 }
 
 // Iniciar o programa
 int main()
 {
+    // idioma definido para português com a codificação (ISO 8859-1) | idioma default: "Portuguese_Brazil.1252"
     setlocale(LC_ALL, "Portuguese_Brazil.1252");
 
-    char NomeProduto[50][30];
-    float Quantidade[50];
-    float Preco[50];
-    int quantidade = 0;
-    int escolha;
-    char continuar[10];
+    // Setando variáveis
+    char NomeProduto[50][30]; // Nome do produto, primeira casa [50] espaços disponiveis no estoque, segunda casa [30] para 29 caractéres possiveis pro nome
+    float Quantidade[50]; // Quantidade de espaço no estoque
+    float Preco[50]; // Preço dos produtos, casa [50] espaços disponiveis no estoque
+    int quantidade = 0; // Quantidade para ID
+    int escolha; // Escolha para entrar em menu
+    char continuar[10]; // Continuar para escolha de manter o programa aberto, [10] caracteres limite
 
+    // Chamar função de importar estoque usando "estoque.txt"
     carregarProdutosDeArquivo(NomeProduto, Quantidade, Preco, &quantidade, "estoque.txt");
 
     do
     {
-        system("cls");
+        // Menu principal
+        system("cls"); // Limpar tela para exibir novo menu
         printf("------------ Menu ------------\n");
         printf("1. Inventário\n");
         printf("2. Estoque\n");
@@ -321,27 +329,33 @@ int main()
         printf("4. Sair\n");
         printf("------------------------------\n");
         printf("Escolha uma opção: ");
-        scanf("%d", &escolha);
+        scanf("%d", &escolha); // Entrar na opção definida pelo usuário
         getchar();
 
+        // Switch para escolha
         switch (escolha)
         {
         case 1:
+            // Chamar função de inventário
             inventariarProduto(NomeProduto, Quantidade, Preco, &quantidade);
             break;
         case 2:
+            // Chamar função de estoque
             estoque(NomeProduto, Quantidade, Preco, quantidade);
             break;
         case 3:
+            // Chamar função de caixa
             registrarCompra(NomeProduto, Quantidade, Preco, &quantidade);
             break;
         case 4:
+            // Fechar programa
             printf("Saindo do programa...\n");
             break;
         default:
             printf("Opção inválida.\n");
         }
 
+        // função para continuar o programa
         if (escolha != 4)
         {
             printf("Deseja continuar no programa? (s/n): ");
