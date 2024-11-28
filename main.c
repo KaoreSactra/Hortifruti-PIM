@@ -4,7 +4,7 @@
 #include <locale.h>
 #include <stdlib.h>
 
-void carregarProdutosDeArquivo(char NomeProduto[][100], int Quantidade[], float Preco[], int *quantidade, const char *nomeArquivo)
+void carregarProdutosDeArquivo(char NomeProduto[][30], int Quantidade[], float Preco[], int *quantidade, const char *nomeArquivo)
 {
     FILE *arquivo = fopen(nomeArquivo, "r");
     if (arquivo == NULL)
@@ -19,7 +19,7 @@ void carregarProdutosDeArquivo(char NomeProduto[][100], int Quantidade[], float 
     while (fgets(linha, sizeof(linha), arquivo))
     {
         linha[strcspn(linha, "\n")] = '\0';
-        char nome[100];
+        char nome[30];
         float preco;
         int quantidadeProduto;
 
@@ -43,7 +43,7 @@ void carregarProdutosDeArquivo(char NomeProduto[][100], int Quantidade[], float 
     printf("%d produtos carregados com sucesso do arquivo '%s'.\n", *quantidade, nomeArquivo);
 }
 
-void salvarProdutosEmArquivo(const char NomeProduto[][100], int Quantidade[], float Preco[], int quantidade, const char *nomeArquivo)
+void salvarProdutosEmArquivo(const char NomeProduto[][30], int Quantidade[], float Preco[], int quantidade, const char *nomeArquivo)
 {
     FILE *arquivo = fopen(nomeArquivo, "w");
     if (arquivo == NULL)
@@ -61,7 +61,7 @@ void salvarProdutosEmArquivo(const char NomeProduto[][100], int Quantidade[], fl
     printf("Produtos salvos no arquivo '%s'.\n", nomeArquivo);
 }
 
-void registrarCompra(char NomeProduto[][100], int Quantidade[], float Preco[], int *quantidade)
+void registrarCompra(char NomeProduto[][30], int Quantidade[], float Preco[], int *quantidade)
 {
     FILE *notaFiscal = fopen("nota_fiscal.txt", "w");
     if (notaFiscal == NULL)
@@ -129,7 +129,7 @@ void registrarCompra(char NomeProduto[][100], int Quantidade[], float Preco[], i
     salvarProdutosEmArquivo(NomeProduto, Quantidade, Preco, *quantidade, "estoque.txt");
 }
 
-void adicionarProduto(char NomeProduto[][100], int Quantidade[], float Preco[], int *quantidade)
+void adicionarProduto(char NomeProduto[][30], int Quantidade[], float Preco[], int *quantidade)
 {
     if (*quantidade >= 50)
     {
@@ -137,7 +137,7 @@ void adicionarProduto(char NomeProduto[][100], int Quantidade[], float Preco[], 
         return;
     }
 
-    char nome[100];
+    char nome[30];
     float preco;
     int quantidadeProduto;
 
@@ -161,7 +161,7 @@ void adicionarProduto(char NomeProduto[][100], int Quantidade[], float Preco[], 
     printf("Produto adicionado com sucesso!\n");
 }
 
-void removerProduto(char NomeProduto[][100], int Quantidade[], float Preco[], int *quantidade)
+void removerProduto(char NomeProduto[][30], int Quantidade[], float Preco[], int *quantidade)
 {
     if (*quantidade == 0)
     {
@@ -191,7 +191,7 @@ void removerProduto(char NomeProduto[][100], int Quantidade[], float Preco[], in
     printf("Produto removido com sucesso!\n");
 }
 
-void editarProduto(char NomeProduto[][100], int Quantidade[], float Preco[], int quantidade)
+void editarProduto(char NomeProduto[][30], int Quantidade[], float Preco[], int quantidade)
 {
     if (quantidade == 0)
     {
@@ -210,7 +210,7 @@ void editarProduto(char NomeProduto[][100], int Quantidade[], float Preco[], int
         return;
     }
 
-    char nome[100];
+    char nome[30];
     float preco;
     int quantidadeProduto;
 
@@ -233,7 +233,7 @@ void editarProduto(char NomeProduto[][100], int Quantidade[], float Preco[], int
     printf("Produto editado com sucesso!\n");
 }
 
-void inventariarProduto(char NomeProduto[][100], int Quantidade[], float Preco[], int *quantidade)
+void inventariarProduto(char NomeProduto[][30], int Quantidade[], float Preco[], int *quantidade)
 {
     int opcao;
     do
@@ -272,7 +272,7 @@ void inventariarProduto(char NomeProduto[][100], int Quantidade[], float Preco[]
     } while (opcao != 4);
 }
 
-void estoque(const char NomeProduto[][100], int Quantidade[], float Preco[], int quantidade)
+void estoque(const char NomeProduto[][30], int Quantidade[], float Preco[], int quantidade)
 {
     if (quantidade == 0)
     {
@@ -281,19 +281,19 @@ void estoque(const char NomeProduto[][100], int Quantidade[], float Preco[], int
     }
 
     system("cls");
-    printf("------------ Estoque ------------\n");
+    printf("------------------------- Estoque -------------------------\n");
     for (int i = 0; i < quantidade; i++)
     {
-        printf("%d: %s | R$/kg: %.2f | Quantidade (kg): %d\n", i + 1, NomeProduto[i], Preco[i], Quantidade[i]);
+        printf("%03d: %-15s | R$/kg: %.2f | Quantidade (kg): %03d\n", i + 1, NomeProduto[i], Preco[i], Quantidade[i]);
     }
-    printf("---------------------------------\n");
+    printf("-----------------------------------------------------------\n");
 }
 
 int main()
 {
     setlocale(LC_ALL, "Portuguese_Brazil.1252");
 
-    char NomeProduto[50][100];
+    char NomeProduto[50][30];
     int Quantidade[50];
     float Preco[50];
     int quantidade = 0;
