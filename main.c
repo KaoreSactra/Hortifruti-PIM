@@ -1,9 +1,10 @@
-#include <stdio.h>
-#include <string.h>
-#include <ctype.h>
-#include <locale.h>
-#include <stdlib.h>
+#include <stdio.h> // Essencial para entrada e saída padrão e manipulação de arquivos.
+#include <string.h> // Usada para realizar operações em strings e blocos de memória.
+#include <ctype.h> // Trabalha com caracteres individuais de forma eficiente.
+#include <locale.h> // Adapta o programa para diferentes regiões ou idiomas.
+#include <stdlib.h> // Funções utilitárias para memória, conversões e controle de execução.
 
+// Função para importar estoque
 void carregarProdutosDeArquivo(char NomeProduto[][30], int Quantidade[], float Preco[], int *quantidade, const char *nomeArquivo)
 {
     FILE *arquivo = fopen(nomeArquivo, "r");
@@ -43,6 +44,7 @@ void carregarProdutosDeArquivo(char NomeProduto[][30], int Quantidade[], float P
     printf("%d produtos carregados com sucesso do arquivo '%s'.\n", *quantidade, nomeArquivo);
 }
 
+// Função para exportar estoque para txt
 void salvarProdutosEmArquivo(const char NomeProduto[][30], int Quantidade[], float Preco[], int quantidade, const char *nomeArquivo)
 {
     FILE *arquivo = fopen(nomeArquivo, "w");
@@ -61,6 +63,7 @@ void salvarProdutosEmArquivo(const char NomeProduto[][30], int Quantidade[], flo
     printf("Produtos salvos no arquivo '%s'.\n", nomeArquivo);
 }
 
+// Função do caixa
 void registrarCompra(char NomeProduto[][30], int Quantidade[], float Preco[], int *quantidade)
 {
     FILE *notaFiscal = fopen("nota_fiscal.txt", "w");
@@ -129,6 +132,7 @@ void registrarCompra(char NomeProduto[][30], int Quantidade[], float Preco[], in
     salvarProdutosEmArquivo(NomeProduto, Quantidade, Preco, *quantidade, "estoque.txt");
 }
 
+// Função para adicionar um novo produto ao estoque
 void adicionarProduto(char NomeProduto[][30], int Quantidade[], float Preco[], int *quantidade)
 {
     if (*quantidade >= 50)
@@ -161,6 +165,7 @@ void adicionarProduto(char NomeProduto[][30], int Quantidade[], float Preco[], i
     printf("Produto adicionado com sucesso!\n");
 }
 
+// Função para remover um produto existente do estoque
 void removerProduto(char NomeProduto[][30], int Quantidade[], float Preco[], int *quantidade)
 {
     if (*quantidade == 0)
@@ -191,6 +196,7 @@ void removerProduto(char NomeProduto[][30], int Quantidade[], float Preco[], int
     printf("Produto removido com sucesso!\n");
 }
 
+// Função para editar um produto existente do estoque
 void editarProduto(char NomeProduto[][30], int Quantidade[], float Preco[], int quantidade)
 {
     if (quantidade == 0)
@@ -233,6 +239,7 @@ void editarProduto(char NomeProduto[][30], int Quantidade[], float Preco[], int 
     printf("Produto editado com sucesso!\n");
 }
 
+// Função para gerenciar o inventário do programa
 void inventariarProduto(char NomeProduto[][30], int Quantidade[], float Preco[], int *quantidade)
 {
     int opcao;
@@ -272,6 +279,7 @@ void inventariarProduto(char NomeProduto[][30], int Quantidade[], float Preco[],
     } while (opcao != 4);
 }
 
+// Função para exibir estoque do programa
 void estoque(const char NomeProduto[][30], int Quantidade[], float Preco[], int quantidade)
 {
     if (quantidade == 0)
@@ -289,6 +297,7 @@ void estoque(const char NomeProduto[][30], int Quantidade[], float Preco[], int 
     printf("-----------------------------------------------------------\n");
 }
 
+// Iniciar o programa
 int main()
 {
     setlocale(LC_ALL, "Portuguese_Brazil.1252");
