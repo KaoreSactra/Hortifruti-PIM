@@ -1,12 +1,7 @@
 ----------------------------------------------------------
 Produto: Maca
-Quantidade comprada (kg): 1
+Quantidade comprada (kg): 1,30
 R$/kg: 18,50
-Total: 18,50
-----------------------------------------------------------
-Produto: Laranja
-Quantidade comprada (kg): 2
-R$/kg: 12,50
-Total: 25,00
+Total: 24,05
 ----------------------- Nota Fiscal ----------------------
-Total geral (R$): 43,50
+Total geral (R$): 24,05

@@ -1,11 +1,11 @@
-#include <stdio.h> // Essencial para entrada e saída padrão e manipulação de arquivos.
+#include <stdio.h>  // Essencial para entrada e saída padrão e manipulação de arquivos.
 #include <string.h> // Usada para realizar operações em strings e blocos de memória.
-#include <ctype.h> // Trabalha com caracteres individuais de forma eficiente.
+#include <ctype.h>  // Trabalha com caracteres individuais de forma eficiente.
 #include <locale.h> // Adapta o programa para diferentes regiões ou idiomas.
 #include <stdlib.h> // Funções utilitárias para memória, conversões e controle de execução.
 
 // Função para importar estoque
-void carregarProdutosDeArquivo(char NomeProduto[][30], int Quantidade[], float Preco[], int *quantidade, const char *nomeArquivo)
+void carregarProdutosDeArquivo(char NomeProduto[][30], float Quantidade[], float Preco[], int *quantidade, const char *nomeArquivo)
 {
     FILE *arquivo = fopen(nomeArquivo, "r");
     if (arquivo == NULL)
@@ -21,10 +21,9 @@ void carregarProdutosDeArquivo(char NomeProduto[][30], int Quantidade[], float P
     {
         linha[strcspn(linha, "\n")] = '\0';
         char nome[30];
-        float preco;
-        int quantidadeProduto;
+        float preco, quantidadeProduto;
 
-        if (sscanf(linha, "%[^|]|%f|%d", nome, &preco, &quantidadeProduto) == 3)
+        if (sscanf(linha, "%[^|]|%f|%f", nome, &preco, &quantidadeProduto) == 3)
         {
             if (*quantidade < 50)
             {
@@ -45,7 +44,7 @@ void carregarProdutosDeArquivo(char NomeProduto[][30], int Quantidade[], float P
 }
 
 // Função para exportar estoque para txt
-void salvarProdutosEmArquivo(const char NomeProduto[][30], int Quantidade[], float Preco[], int quantidade, const char *nomeArquivo)
+void salvarProdutosEmArquivo(const char NomeProduto[][30], float Quantidade[], float Preco[], int quantidade, const char *nomeArquivo)
 {
     FILE *arquivo = fopen(nomeArquivo, "w");
     if (arquivo == NULL)
@@ -56,7 +55,7 @@ void salvarProdutosEmArquivo(const char NomeProduto[][30], int Quantidade[], flo
 
     for (int i = 0; i < quantidade; i++)
     {
-        fprintf(arquivo, "%s|%.2f|%d\n", NomeProduto[i], Preco[i], Quantidade[i]);
+        fprintf(arquivo, "%s|%.2f|%.2f\n", NomeProduto[i], Preco[i], Quantidade[i]);
     }
 
     fclose(arquivo);
@@ -64,7 +63,7 @@ void salvarProdutosEmArquivo(const char NomeProduto[][30], int Quantidade[], flo
 }
 
 // Função do caixa
-void registrarCompra(char NomeProduto[][30], int Quantidade[], float Preco[], int *quantidade)
+void registrarCompra(char NomeProduto[][30], float Quantidade[], float Preco[], int *quantidade)
 {
     FILE *notaFiscal = fopen("nota_fiscal.txt", "w");
     if (notaFiscal == NULL)
@@ -73,7 +72,8 @@ void registrarCompra(char NomeProduto[][30], int Quantidade[], float Preco[], in
         return;
     }
 
-    int produtoIndex, quantidadeCompra;
+    int produtoIndex;
+    float quantidadeCompra;
     float totalCompra = 0.0;
     char continuarCompra[10];
 
@@ -92,8 +92,8 @@ void registrarCompra(char NomeProduto[][30], int Quantidade[], float Preco[], in
             continue;
         }
 
-        printf("Digite a quantidade do produto a ser comprada: ");
-        scanf("%d", &quantidadeCompra);
+        printf("Digite a quantidade do produto a ser comprada (kg): ");
+        scanf("%f", &quantidadeCompra);
         getchar();
 
         if (quantidadeCompra > Quantidade[produtoIndex - 1])
@@ -105,11 +105,11 @@ void registrarCompra(char NomeProduto[][30], int Quantidade[], float Preco[], in
         Quantidade[produtoIndex - 1] -= quantidadeCompra;
 
         float preco = Preco[produtoIndex - 1];
-        float totalProduto = preco * quantidadeCompra; // Total para este produto
+        float totalProduto = preco * quantidadeCompra;
         totalCompra += totalProduto;
         fprintf(notaFiscal, "----------------------------------------------------------\n");
         fprintf(notaFiscal, "Produto: %s\n", NomeProduto[produtoIndex - 1]);
-        fprintf(notaFiscal, "Quantidade comprada (kg): %d\n", quantidadeCompra);
+        fprintf(notaFiscal, "Quantidade comprada (kg): %.2f\n", quantidadeCompra);
         fprintf(notaFiscal, "R$/kg: %.2f\n", preco);
         fprintf(notaFiscal, "Total: %.2f\n", totalProduto);
 
@@ -133,7 +133,7 @@ void registrarCompra(char NomeProduto[][30], int Quantidade[], float Preco[], in
 }
 
 // Função para adicionar um novo produto ao estoque
-void adicionarProduto(char NomeProduto[][30], int Quantidade[], float Preco[], int *quantidade)
+void adicionarProduto(char NomeProduto[][30], float Quantidade[], float Preco[], int *quantidade)
 {
     if (*quantidade >= 50)
     {
@@ -166,7 +166,7 @@ void adicionarProduto(char NomeProduto[][30], int Quantidade[], float Preco[], i
 }
 
 // Função para remover um produto existente do estoque
-void removerProduto(char NomeProduto[][30], int Quantidade[], float Preco[], int *quantidade)
+void removerProduto(char NomeProduto[][30], float Quantidade[], float Preco[], int *quantidade)
 {
     if (*quantidade == 0)
     {
@@ -197,7 +197,7 @@ void removerProduto(char NomeProduto[][30], int Quantidade[], float Preco[], int
 }
 
 // Função para editar um produto existente do estoque
-void editarProduto(char NomeProduto[][30], int Quantidade[], float Preco[], int quantidade)
+void editarProduto(char NomeProduto[][30], float Quantidade[], float Preco[], int quantidade)
 {
     if (quantidade == 0)
     {
@@ -240,7 +240,7 @@ void editarProduto(char NomeProduto[][30], int Quantidade[], float Preco[], int 
 }
 
 // Função para gerenciar o inventário do programa
-void inventariarProduto(char NomeProduto[][30], int Quantidade[], float Preco[], int *quantidade)
+void inventariarProduto(char NomeProduto[][30], float Quantidade[], float Preco[], int *quantidade)
 {
     int opcao;
     do
@@ -280,7 +280,7 @@ void inventariarProduto(char NomeProduto[][30], int Quantidade[], float Preco[],
 }
 
 // Função para exibir estoque do programa
-void estoque(const char NomeProduto[][30], int Quantidade[], float Preco[], int quantidade)
+void estoque(const char NomeProduto[][30], float Quantidade[], float Preco[], int quantidade)
 {
     if (quantidade == 0)
     {
@@ -292,7 +292,7 @@ void estoque(const char NomeProduto[][30], int Quantidade[], float Preco[], int 
     printf("------------------------- Estoque -------------------------\n");
     for (int i = 0; i < quantidade; i++)
     {
-        printf("%03d: %-15s | R$/kg: %.2f | Quantidade (kg): %03d\n", i + 1, NomeProduto[i], Preco[i], Quantidade[i]);
+        printf("%03d: %-15s | R$/kg: %-6.2f | Quantidade (kg): %6.2f\n", i + 1, NomeProduto[i], Preco[i], Quantidade[i]);
     }
     printf("-----------------------------------------------------------\n");
 }
@@ -303,7 +303,7 @@ int main()
     setlocale(LC_ALL, "Portuguese_Brazil.1252");
 
     char NomeProduto[50][30];
-    int Quantidade[50];
+    float Quantidade[50];
     float Preco[50];
     int quantidade = 0;
     int escolha;
