@@ -1,5 +1,5 @@
-Maca|18,50|80
-Laranja|12,50|94
+Maca|18,50|72
+Laranja|12,50|92
 Abacaxi|14,00|60
 Morango|19,00|70
 Tomate|17,00|85
@@ -17,3 +17,4 @@ Manga|15,00|90
 Melancia|14,00|100
 Abacate|19,00|70
 Uva|17,50|85
+Banana|13,25|100
